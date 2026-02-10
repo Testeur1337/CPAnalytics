@@ -1,0 +1,72 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = env("DATABASE_PROVIDER")
+  url      = env("DATABASE_URL")
+}
+
+model Campaign {
+  id        String   @id @default(cuid())
+  year      Int
+  month     Int
+  name      String
+  goalUSD   Float    @default(400)
+  startsAt  DateTime
+  endsAt    DateTime
+  isActive  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  links       Link[]
+  clicks      Click[]
+  conversions Conversion[]
+
+  @@unique([year, month])
+}
+
+model Link {
+  id           String   @id @default(cuid())
+  campaignId   String
+  name         String
+  slug         String
+  destinationA String
+  destinationB String?
+  weightA      Int      @default(100)
+  weightB      Int      @default(0)
+  tags         String?
+  createdAt    DateTime @default(now())
+  campaign Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  clicks   Click[]
+
+  @@unique([campaignId, slug])
+}
+
+model Click {
+  id          String   @id @default(cuid())
+  campaignId  String
+  linkId      String
+  clickId     String   @unique
+  videoId     String?
+  hookType    String?
+  contentType String?
+  offerName   String?
+  userAgent   String?
+  referrer    String?
+  ipHash      String?
+  createdAt   DateTime @default(now())
+  campaign    Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  link        Link     @relation(fields: [linkId], references: [id], onDelete: Cascade)
+  conversions Conversion[]
+}
+
+model Conversion {
+  id         String   @id @default(cuid())
+  campaignId String
+  clickId    String
+  payout     Float    @default(0)
+  txid       String?  @unique
+  status     String?
+  createdAt  DateTime @default(now())
+  campaign   Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  click      Click    @relation(fields: [clickId], references: [clickId], onDelete: Cascade)
+}
