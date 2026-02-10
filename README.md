@@ -21,11 +21,8 @@ Next.js 14 + TypeScript + Prisma tracking app for monthly CPA campaign monitorin
 Create `.env` from `.env.example`.
 
 - `DATABASE_URL`
-  - If starts with `postgres`, app sets provider to PostgreSQL.
+  - If it starts with `postgres`, Prisma is prepared for PostgreSQL during install/build.
   - Otherwise defaults to SQLite `file:./prisma/dev.db`.
-- `DATABASE_PROVIDER`
-  - Auto-derived in app runtime if omitted (`postgresql` vs `sqlite`).
-  - Set explicitly in deployment env for Prisma CLI consistency.
 - `IP_HASH_SALT` (required)
 - `POSTBACK_SECRET` (optional)
 
@@ -98,13 +95,13 @@ Computed server-side:
    ```bash
    npm install && npx prisma generate && npx prisma migrate deploy && npm run build
    ```
+   (`npm install` runs `postinstall`, which auto-prepares Prisma for SQLite or PostgreSQL based on `DATABASE_URL`.)
 4. Start command:
    ```bash
    npm run start
    ```
 5. Environment variables:
    - `DATABASE_URL=file:./prisma/dev.db`
-   - `DATABASE_PROVIDER=sqlite`
    - `IP_HASH_SALT=<your-random-salt>`
    - `POSTBACK_SECRET=<optional>`
 
@@ -115,9 +112,7 @@ Render free uses an ephemeral filesystem. Local SQLite data may reset on deploys
 1. Create a Render Postgres database (paid/free tier if available).
 2. Set env:
    - `DATABASE_URL=postgres://...`
-   - `DATABASE_PROVIDER=postgresql`
-3. Redeploy.
-4. `prisma migrate deploy` applies schema in build step.
+3. Redeploy. `postinstall` auto-selects the PostgreSQL schema/migrations, then `prisma migrate deploy` applies them in the build step.
 
 ## Compliance
 This app only provides legit redirect + conversion tracking infrastructure and does not automate deceptive CPA behavior.
