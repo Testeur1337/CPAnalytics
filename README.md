@@ -30,6 +30,7 @@ Example `.env` for free test:
 
 ```env
 DATABASE_URL="file:./prisma/dev.db"
+DATABASE_PROVIDER="sqlite"
 IP_HASH_SALT="change_me"
 POSTBACK_SECRET=""
 ```
