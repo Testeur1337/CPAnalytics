@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { prisma } from "@/lib/prisma";
 import { buildDashboard } from "@/lib/analytics";
 import { getOrCreateCurrentCampaign } from "@/lib/campaign";
