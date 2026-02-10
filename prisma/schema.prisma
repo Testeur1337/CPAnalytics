@@ -3,20 +3,20 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = env("DATABASE_PROVIDER")
   url      = env("DATABASE_URL")
 }
 
 model Campaign {
-  id          String       @id @default(cuid())
-  year        Int
-  month       Int
-  name        String
-  goalUSD     Float        @default(400)
-  startsAt    DateTime
-  endsAt      DateTime
-  isActive    Boolean      @default(false)
-  createdAt   DateTime     @default(now())
+  id        String   @id @default(cuid())
+  year      Int
+  month     Int
+  name      String
+  goalUSD   Float    @default(400)
+  startsAt  DateTime
+  endsAt    DateTime
+  isActive  Boolean  @default(false)
+  createdAt DateTime @default(now())
   links       Link[]
   clicks      Click[]
   conversions Conversion[]
@@ -35,8 +35,8 @@ model Link {
   weightB      Int      @default(0)
   tags         String?
   createdAt    DateTime @default(now())
-  campaign     Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
-  clicks       Click[]
+  campaign Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  clicks   Click[]
 
   @@unique([campaignId, slug])
 }

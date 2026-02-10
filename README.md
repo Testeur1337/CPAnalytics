@@ -30,6 +30,7 @@ Example `.env` for free test:
 
 ```env
 DATABASE_URL="file:./prisma/dev.db"
+DATABASE_PROVIDER="sqlite"
 IP_HASH_SALT="change_me"
 POSTBACK_SECRET=""
 ```
@@ -92,7 +93,7 @@ Computed server-side:
 2. Connect this repo.
 3. Build command:
    ```bash
-   npm install && npm run prisma:generate && npm run prisma:migrate && npm run build
+   npm install && npx prisma generate && npx prisma migrate deploy && npm run build
    ```
    (`npm install` runs `postinstall`, which auto-prepares Prisma for SQLite or PostgreSQL based on `DATABASE_URL`.)
 4. Start command:
@@ -112,14 +113,6 @@ Render free uses an ephemeral filesystem. Local SQLite data may reset on deploys
 2. Set env:
    - `DATABASE_URL=postgres://...`
 3. Redeploy. `postinstall` auto-selects the PostgreSQL schema/migrations, then `prisma migrate deploy` applies them in the build step.
-
-
-### If your deploy still shows `provider = env("DATABASE_PROVIDER")`
-That means Render is building an older commit. This repository now uses static providers in `prisma/schema.prisma` and provider-specific templates (`schema.sqlite.prisma` / `schema.postgresql.prisma`).
-
-- Confirm the deployed commit includes this fix (latest commit hash).
-- Make sure Render is pointed at the updated branch/commit.
-- Prefer the npm script build command above so Prisma preparation always runs before generate/migrate.
 
 ## Compliance
 This app only provides legit redirect + conversion tracking infrastructure and does not automate deceptive CPA behavior.
