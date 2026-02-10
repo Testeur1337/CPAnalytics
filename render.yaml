@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: cpa-tracker-hub
+    env: node
+    plan: free
+    buildCommand: npm install && npm run prisma:generate && npm run prisma:migrate && npm run build
+    startCommand: npm run start
+    envVars:
+      - key: DATABASE_URL
+        value: file:./prisma/dev.db
+      - key: IP_HASH_SALT
+        sync: false
+      - key: POSTBACK_SECRET
+        sync: false
