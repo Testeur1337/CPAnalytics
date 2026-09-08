@@ -12,13 +12,14 @@ function pickDestination(destinationA: string, destinationB: string | null, weig
   return random < weightA ? destinationA : destinationB;
 }
 
-export async function GET(req: NextRequest, { params }: { params: { slug: string } }) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
   const campaign = await getOrCreateCurrentCampaign();
   const link = await prisma.link.findUnique({
     where: {
       campaignId_slug: {
         campaignId: campaign.id,
-        slug: params.slug
+        slug
       }
     }
   });
