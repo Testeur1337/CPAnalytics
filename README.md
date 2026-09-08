@@ -33,6 +33,19 @@ npx prisma migrate deploy
 npm run dev
 ```
 
+## Railway setup
+This repo includes a `railway.json` so Railway's Nixpacks builder picks up the right build/start commands automatically — no manual configuration needed beyond env vars.
+
+1. In Railway, create a new project from this GitHub repo.
+2. Add a **PostgreSQL** plugin to the project (Railway → **New** → **Database** → **PostgreSQL**).
+3. On the web service, set `DATABASE_URL` to `${{Postgres.DATABASE_URL}}` (Railway's variable reference to the Postgres plugin) via the **Variables** tab.
+4. Set `IP_HASH_SALT` (required) and optional `POSTBACK_SECRET`.
+5. Deploy. Railway will:
+   - Run `npm install` (which also runs `prisma generate` via the `postinstall` script)
+   - Run `npm run build` (from `railway.json`)
+   - Run `npx prisma migrate deploy && npm run start` on each deploy (from `railway.json`), so migrations apply automatically before the app starts.
+6. Railway sets `PORT` automatically; `next start -p $PORT` picks it up.
+
 ## Render setup
 1. In Render, create a **PostgreSQL** database (Render free Postgres is fine for testing).
 2. Create a **Web Service** for this repo.
