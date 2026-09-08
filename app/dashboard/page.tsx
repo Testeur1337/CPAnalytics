@@ -9,9 +9,9 @@ function Badge({ decision }: { decision: string }) {
   return <span className={cn}>{decision}</span>;
 }
 
-export default async function DashboardPage({ searchParams }: { searchParams: { campaign?: string } }) {
+export default async function DashboardPage({ searchParams }: { searchParams: Promise<{ campaign?: string }> }) {
   const current = await getOrCreateCurrentCampaign();
-  const selectedId = searchParams.campaign ?? current.id;
+  const selectedId = (await searchParams).campaign ?? current.id;
 
   const campaigns = await prisma.campaign.findMany({ orderBy: [{ year: "desc" }, { month: "desc" }], take: 12 });
   const data = await buildDashboard(selectedId, "7d");
