@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Goodtime Web</title>
+<meta name="description" content="A focus timer with labels, history and stats. Runs entirely in your browser; your data stays on your device as JSON.">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='13' fill='none' stroke='%2314b8a6' stroke-width='4'/%3E%3Cpath d='M16 8v8l5 3' fill='none' stroke='%2314b8a6' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body data-phase="work">
+<div id="app">
+  <nav id="nav" aria-label="Main">
+    <div class="brand"><span class="brand-mark" aria-hidden="true"></span><span class="brand-name">Goodtime</span></div>
+    <button class="nav-btn" data-view="timer" aria-current="page"><span class="ico" data-ico="timer"></span><span>Timer</span></button>
+    <button class="nav-btn" data-view="stats"><span class="ico" data-ico="chart"></span><span>Stats</span></button>
+    <button class="nav-btn" data-view="history"><span class="ico" data-ico="list"></span><span>History</span></button>
+    <button class="nav-btn" data-view="labels"><span class="ico" data-ico="tag"></span><span>Labels</span></button>
+    <button class="nav-btn" data-view="settings"><span class="ico" data-ico="gear"></span><span>Settings</span></button>
+  </nav>
+
+  <main id="main">
+    <section id="view-timer" class="view" aria-label="Timer">
+      <div class="timer-top">
+        <div class="phase-tabs" role="tablist" aria-label="Timer phase">
+          <button role="tab" data-phase="work">Focus</button>
+          <button role="tab" data-phase="short">Break</button>
+          <button role="tab" data-phase="long">Long break</button>
+        </div>
+        <button id="btn-fullscreen" class="icon-btn" title="Toggle fullscreen (F)" aria-label="Toggle fullscreen"><span class="ico" data-ico="expand"></span></button>
+      </div>
+
+      <div class="dial-wrap">
+        <div class="dial" id="dial">
+          <svg viewBox="0 0 200 200" aria-hidden="true">
+            <circle class="ring-bg" cx="100" cy="100" r="92"/>
+            <circle class="ring-fg" id="ring-fg" cx="100" cy="100" r="92" transform="rotate(-90 100 100)"/>
+          </svg>
+          <div class="dial-center">
+            <div class="clock" id="clock" role="timer" aria-live="off">25:00</div>
+            <div class="dial-sub" id="dial-sub">Ready to focus</div>
+          </div>
+        </div>
+      </div>
+
+      <button id="label-chip" class="label-chip" aria-haspopup="dialog"><span class="dot" id="label-dot"></span><span id="label-name">Unlabeled</span><span class="ico sm" data-ico="chev"></span></button>
+
+      <div class="cycle" id="cycle" aria-label="Sessions in the current cycle"></div>
+
+      <div class="controls">
+        <button id="btn-stop" class="ctl" title="Stop and reset (S)" aria-label="Stop"><span class="ico" data-ico="stop"></span></button>
+        <button id="btn-main" class="ctl main" title="Start / pause (Space)"><span class="ico" data-ico="play"></span><span id="btn-main-text">Start</span></button>
+        <button id="btn-skip" class="ctl" title="Finish and go to next phase (N)" aria-label="Next phase"><span class="ico" data-ico="skip"></span></button>
+      </div>
+      <div class="controls sub">
+        <button id="btn-plus" class="link-btn" title="Add one minute (+)">+1 min</button>
+        <button id="btn-minus" class="link-btn" title="Remove one minute (-)">−1 min</button>
+      </div>
+
+      <div class="today card" id="today-card"></div>
+    </section>
+
+    <section id="view-stats" class="view" hidden aria-label="Stats"></section>
+    <section id="view-history" class="view" hidden aria-label="History"></section>
+    <section id="view-labels" class="view" hidden aria-label="Labels"></section>
+    <section id="view-settings" class="view" hidden aria-label="Settings"></section>
+  </main>
+</div>
+
+<dialog id="dlg"></dialog>
+<div id="toasts" aria-live="polite"></div>
+
+<script src="js/util.js"></script>
+<script src="js/store.js"></script>
+<script src="js/timer.js"></script>
+<script src="js/notify.js"></script>
+<script src="js/charts.js"></script>
+<script src="js/view-timer.js"></script>
+<script src="js/view-stats.js"></script>
+<script src="js/view-history.js"></script>
+<script src="js/view-labels.js"></script>
+<script src="js/view-settings.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
